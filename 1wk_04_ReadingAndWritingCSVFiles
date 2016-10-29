@@ -1,0 +1,72 @@
+#import mgp.csv files (data for 234 cars)
+
+import csv
+
+%precision 2
+
+with open('mpg.csv') as csvfile:
+    mpg = list(csv.DictReader(csvfile)) # this reads each row of our file as a dictionary
+
+
+mpg[:3] # The first three dictionaries in our list.
+
+#to find the number of dictionaries in our list:
+len(mpg)
+#output = 234
+
+#keys gives the column names of our csv
+mpg[0].keys()
+#Out[50]: dict_keys(['', 'model', 'fl', 'year', 'drv', 'hwy', 'cty', 'manufacturer', 'class', 'cyl', 'displ', 'trans'])
+# to find average cty fuel economy across cars.
+#since all the vaslues in the dict are strings, change to float
+sum(float)d['cty']) for d in mpg) / len(mpg)
+#outputs 16.86
+
+# for average hwy fuel ecomony across all cars
+sum(float)d['hwy']) for d in mpg) / len(mpg)
+#outputs 23.44
+
+# for number of cylinders the cars in our dataset have:
+cylinders = set(d['cyl'] for d in mpg )
+cylinders
+#output = {"4", "5", "6", "8"}
+
+# to group cars by #cylinders and find average cty mpg per group:
+CtyMpgByCyl = []
+    for c in cylinders:
+        summpg=0
+        cyltypecount = 0
+        for d in mpg:
+            if d["cyl"] == c:
+                summpg += float(d['cty'])
+                cyltypecount +=1
+        CtyMpgByCyl.append((c, summpg/cyltypecount)
+CtyMpgByCyl.sort(key=lambda x: x[0])
+CtyMpgByCyl
+#output = [('4', 21.01), ('5', 20.50), ('6', 16.22), ('8', 12.57)]
+
+#to return unique values for the class types in Dataset:
+vehicleclass = set(d['class'] for d in mpg)
+vehicleclass
+# output = {'2seater', 'compact', 'midsize', 'minivan', 'pickup', 'subcompact', 'suv'}
+
+#to find avg mpg for q class vehicle in dataset:
+HwyMpgByClass = []
+for t in vehicleclass:
+    summpg = 0
+    vclasscount =0
+    for d in mpg:
+        if d['class'] == t:
+            summpg += float(d["hwy"])
+            vclasscount +=1
+    HwyMpgByClass.sort(key=lambda x: x[1])
+    HwyMpgByClass
+
+    # out put = [('pickup', 16.88),
+                        # ('suv', 18.13),
+                         #('minivan', 22.36),
+                         #('2seater', 24.80),
+                         #('midsize', 27.29),
+                         #('subcompact', 28.14),
+                         #('compact', 28.30)]
+    
