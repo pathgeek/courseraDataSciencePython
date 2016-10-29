@@ -1,0 +1,172 @@
+## TYPES AND FUNCTIONS
+##=================================
+        Use type to return the object's type.
+        In [10]: type('This is a string')
+        #Out[10]: str
+        In [11]: type(None)
+        #Out[11]: NoneType
+        In [12]: type(1)
+    #    Out[12]: int
+        In [13]: type(1.0)
+    #    Out[13]: float
+        In [14]: type(add_numbers)
+    #    Out[14]: function
+##=================================
+##TUPLES
+                #Imutable sequence of variables
+                # item order cannont be changed once created.
+                #written using parentheses,
+                # contents may be mixed types
+##=================================
+        In [15]:
+        x = (1, 'a', 2, 'b')
+        type(x)
+
+        #Out[15]:   tuple
+##=================================
+## LISTS: mutable data structure.
+##=================================
+        In [16]:
+        x = [1, 'a', 2, 'b']
+        type(x)
+
+        #Out[16]:    list
+            ##=================================
+            ## LISTS: Use append to append an object to a list.
+            ##=================================
+                        In [17]:
+                        x.append(3.3)
+                        print(x)
+
+                    #    out[17] [1, 'a', 2, 'b', 3.3]
+            ##=================================
+            ## LISTS: Iterate through with LOOPS
+            ## the following 2 options  render the same output
+            ##=================================
+                            for item in x:
+                                print(item)
+                            ##====== or ==========##
+                            i=0
+                            while( i != len(x) ):
+                                print(x[i])
+                                i = i + 1
+                ##=================================
+                ## LISTS: Use + to concatinate
+                ##=================================
+
+                                [1,2] + [3+4]
+                        #        output = [1,2,3,4]
+                ##=================================
+                ## LISTS: Use * to repeat Lists
+                ##=================================
+                                [1]*3
+                    #            output = [1,1,1]
+                ##=================================
+                ## LISTS: Use the `in` operator to check if something is inside a list.
+                ##=================================
+                                1 in [1, 2, 3]
+            #                    output = True
+
+##=======================================
+## STRINGS: Use bracket notation to slice a string
+##=======================================
+            ##=======================================
+            ## STRINGS: Use bracket notation to slice a string
+            ##=======================================
+                x = 'This is a string'
+                print(x[0]) #first character
+                print(x[0:1]) #first character, but we have explicitly set the end character
+                print(x[0:2]) #first two characters
+            #    output = T
+            #                    T
+            #                    Th
+            ##=======================================
+                ## STRINGS: this will return the last element
+            ##=======================================
+                                x[-1]
+                #                output = "g"
+            ##=======================================
+                ## STRINGS: this will return the 4th element
+                        #from the end, stops before the 2nd from the end
+            ##=======================================
+                                x[-4:-2]
+                #                output = "ri"
+            ##=======================================
+                ## STRINGS: this will slice from start of string
+                        #stops before 3rd element
+            ##=======================================
+                                x[:3]
+                #                output = "Thi"
+                ##=======================================
+                    ## STRINGS:  this will slice starting from the 3rd element
+                    ##of the string and going all the way to the end
+                ##=======================================
+                            x[3:]
+                #            output = 's is a string'
+                ##=======================================
+                    ## STRINGS:  concating STRINGS
+                ##=======================================
+                    firstname = 'Christopher'
+                    lastname = 'Brooks'
+
+                    print(firstname + ' ' + lastname)
+                    print(firstname*3)
+                    print('Chris' in firstname)
+
+                    #output = Christopher Brooks
+                    #                ChristopherChristopherChristopher
+                    #                True
+                ##=======================================
+                    ## STRINGS:  split returns a list of all the words in a string,
+                    ##                    or a list split on a specific character.
+                    ##      REM: convert objects to strings before concatinating
+                ##=======================================
+                        firstname = 'Christopher Arthur Hansen Brooks'.split(' ')[0]
+                                                            # [0] selects the first element of the list
+                        lastname = 'Christopher Arthur Hansen Brooks'.split(' ')[-1]
+                                                            # [-1] selects the last element of the list
+                        print(firstname)
+                        print(lastname)
+
+                    #    output = Christopher
+                    #                    Brooks
+##=======================================
+## DICTIONARIES: Associates keys with values
+##=======================================
+
+        x = {'Christopher Brooks': 'brooksch@umich.edu', 'Bill Gates': 'billg@microsoft.com'}
+        x['Christopher Brooks'] # Retrieve a value by using the indexing operator
+                for name in x:
+                    print(x[name])
+                    #output:
+                            #brooksch@umich.edu
+                            #billg@microsoft.com
+            ##=======================================
+            ## DICTIONARIES: Iterating over  keys
+            ##=======================================
+                    for name in x:
+                        print(x[name])
+                        #output: brooksch@umich.edu
+                        #                billg@microsoft.com
+            ##=======================================
+            ## DICTIONARIES: Iterating over  values
+            ##=======================================
+                    for email in x.values()
+                        print(email)
+                        # output    brooksch@umich.edu
+                        #                 billg@microsoft.com
+            ##=======================================
+            ## DICTIONARIES: Iterating over  items in the list
+            ##=======================================
+                            for name, email in x.items():
+                            print(name)
+                            print(email)
+                            #output     Christopher Brooks
+                                #                brooksch@umich.edu
+                                #                Bill Gates
+                                #                billg@microsoft.com
+            ##=======================================
+            ## DICTIONARIES:  unpack a sequence into different variables:
+            ##=======================================
+                            x = ('Christopher', 'Brooks', 'brooksch@umich.edu')
+                        fname, lname, email = x
