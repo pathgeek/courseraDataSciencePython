@@ -1,0 +1,18 @@
+#Python has a built in method for convenient string formatting.
+#statement string written with curly braces
+#We can then call the format method on that string and pass in the values that
+#we want substituted as appropriate.
+
+sales_record = {
+'price': 3.24,
+'num_items': 4,
+'person': 'Chris'}
+
+sales_statement = '{} bought {} item(s) at a price of {} each for a total of {}'
+
+print(sales_statement.format(sales_record['person'],
+                             sales_record['num_items'],
+                             sales_record['price'],
+                             sales_record['num_items']*sales_record['price']))
+
+#output = Chris bought 4 item(s) at a price of 3.24 each for a total of 12.96
