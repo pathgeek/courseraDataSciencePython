@@ -1,0 +1,78 @@
+x = 1
+y = 3
+x + y
+# output = 4
+# Python: high level, interpreted (not compiled)
+#                dynamically typed
+#                        allows you to quickly set and modify variable contents without
+#                        having to worry about the underlying syntactic definition of the variable.
+#       doesn't require declaration (var) of variable name, semicolonls
+#       leverages white space to understand scope of functions, loops, line endings
+#=================================
+
+#add_numbers is a function that takes two numbers and adds them together.
+In [7]:
+
+def add_numbers(x, y, z):
+    return x + y+z
+​
+add_numbers(1, 2, 7)
+Out[7]:  10
+#=================================
+#add_numbers updated to take an optional 3rd parameter. Using print
+#allows printing of multiple expressions within a single cell.
+In [ ]:
+
+def add_numbers(x,y,z=None):
+    if (z==None):
+        return x+y
+    else:
+        return x+y+z
+​
+print(add_numbers(1, 2))
+print(add_numbers(1, 2, 3))
+
+#=================================
+#we can rewrite the add numbers function to take three parameters, but
+#we could set the last parameter to be none by default. This means that you
+#can call add numbers with just two values or with three, and you don't have
+#to rewrite the function signature to overload it.
+#This is an important implication. All of the optional parameters, the ones
+# that you got default values for, need to come at the end of the function
+#declaration. It also means that you can pass an optional parameters as labeled
+#values.
+
+#add_numbers updated to take an optional 3rd parameter. Using print allows
+#printing of multiple expressions within a single cell.
+
+def add_numbers(x,y,z=None):
+    if (z==None):
+        return x+y
+    else:
+        return x+y+z
+
+print(add_numbers(1, 2))
+print(add_numbers(1, 2, 3))
+#=================================
+#add_numbers updated to take an optional flag parameter.
+def add_numbers(x, y, z=None, flag=False):
+    if (flag):
+        print('Flag is true!')
+    if (z==None):
+        return x + y
+    else:
+        return x + y + z
+
+print(add_numbers(1, 2, flag=True))
+Flag is true!
+#output =3
+##=================================
+#Assign function add_numbers to variable a.
+In [9]:
+
+def add_numbers(x,y):
+    return x+y
+​
+a = add_numbers
+a(1,2)
+Out[9]:  3
