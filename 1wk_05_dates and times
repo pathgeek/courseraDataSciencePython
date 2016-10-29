@@ -1,0 +1,26 @@
+#Dates and Times
+
+        import datetime as dt
+        import time as tm
+
+dtnow = dt.datetime.fromtimestamp(tm.time())
+dtnow
+#Out[60]:datetime.datetime(2016, 10, 29, 19, 15, 3, 166920)
+
+#dtnow.year, dtnow.month, dtnow.day, dtnow.hour, dtnow.minute, dtnow.second
+# get year, month, day, etc.from a datetime
+
+#`timedelta` is a duration expressing the difference between two dates.
+delta = dt.timedelta(days = 100) # create a timedelta of 100 days
+delta
+#output = datetime.timedelta(100)
+date.today returns the current local date.
+In [ ]:
+
+today = dt.date.today()
+In [ ]:
+
+today - delta # the date 100 days ago
+In [ ]:
+
+today > today-delta # compare dates
