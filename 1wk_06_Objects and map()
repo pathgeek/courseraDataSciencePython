@@ -1,6 +1,19 @@
 #example of a class in Python:
+# define a class using a class keyword, and ending with a colon.
+#Anything indented below this, is within the scope of the class.
+#Classes in Python are generally named using camel case, which means the
+#first character of each word is capitalized.
+#You don't declare variables within the object, you just start using them.
+#Class variables can also be declared. These are just variables which are shared
+#across all instances. So in this example, we're saying that the default for all people
+#is at the school of information.
 class Person:
     department = 'School of Information' #a class variable
+#To define a method, you just write it as you would have a function.
+#The one change, is that to have access to the instance which a method is
+#being invoked upon, you must include self, in the method signature.
+#Similarly, if you want to refer to instance variables set on the object, you
+#pre-pend them with the word self, with a full stop.
 
     def set_name(self, new_name): #a method
         self.name = new_name
@@ -34,6 +47,7 @@ cheapest = map(min, store1, store2)
 cheapest
 #Out[66]:
 #<map at 0x7f66e8184a20>
+# this is a map object, allowing for efficiency. Maps are iterable.
 
 #Now let's iterate through the map object to see the values
 

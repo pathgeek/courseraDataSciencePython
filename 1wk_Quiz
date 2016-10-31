@@ -1,0 +1,55 @@
+1) Python is an example of an
+xx    Interpreted language
+        Declarative language
+        Operating system language
+        Data science language
+        Low level language
+
+2)Data Science is a
+
+            Branch of statistics
+            Branch of computer science
+            Branch of artificial intelligence
+xx         Interdisciplinary, made up of all of the above
+
+3) data visualization is not part of data science
+xx              false
+4) Which bracketing style does Python use for tuples?
+                    { }
+    xx            ( )
+                    [ ]
+5) In Python, strings are considered Mutable, and can be changed.
+                False This is false
+    xx        True
+6) What is the result of the following code: ['a', 'b', 'c'] + [1, 2, 3]
+## this is concatinating a list
+    xx                ['a', 'b', 'c', 1, 2, 3]
+                    TypeError: Cannot convert list(int) to list(str)
+                    ['a1', 'b2', 'c3']
+                    [['a', 'b', 'c'], [1, 2, 3]]
+7)String slicing is
+                    A way to make string mutable in python
+                    A way to reduce the size on disk of strings in python
+        xx            A way to make a substring of a string in python
+
+8) When you create a lambda, what type is returned? E.g. type(lambda x: x+1) returns
+                        <class 'function'>
+                        <class 'type'>
+            xx            <class 'int'>  this is wrong
+                        <class 'lambda'>
+
+9) The epoch refers to
+                        January 1, year 0
+        xx              January 1, year 1970
+                        January 1, year 1980
+                        January 1, year 2000
+
+10)  This code, [x**2 for x in range(10)] , is an example of a
+        xx            List comprehension
+                        Sequence comprehension
+                        Tuple comprehension
+                        List multiplication
+
+11)  chose r[::7] wrong
+
+12)  chose r[::2,::2]  wrong
