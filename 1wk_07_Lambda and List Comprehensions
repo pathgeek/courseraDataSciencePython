@@ -1,0 +1,5 @@
+#LAMBDA: creates anonymous function in Python
+# You declare a lambda function with the word lambda followed by a
+#list of arguments, followed by a colon and then a single expression and this is
+#key. There's only one expression to be evaluated in a lambda. The expression
+#value is returned on execution of the lambda. 
