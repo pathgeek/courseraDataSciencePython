@@ -10,3 +10,11 @@ raw_data = {'regiment': ['Nighthawks', 'Nighthawks', 'Nighthawks', 'Nighthawks',
 df = pd.DataFrame(raw_data, columns = ['regiment', 'company', 'name',
 'preTestScore', 'postTestScore'])
 df
+
+d.iloc[0]
+#returns first line of the dataset
+#        regiment         Nighthawks
+#        company                 1st
+#        name                       Miller
+#        preTestScore           4
+#        postTestScore         25

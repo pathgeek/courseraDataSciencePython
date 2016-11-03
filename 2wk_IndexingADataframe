@@ -1,0 +1,213 @@
+As we've seen, both series and data
+frames can have indices applied to them. The index is essentially
+a row level label, and we know that rows correspond to axis zero.
+In our Olympics data, we indexed the data
+frame by the name of the country. Indices can either be inferred,
+such as when we create a new series without an index,
+in which case we get numeric values. Or they can be set explicitly, like when we use the dictionary
+object to create the series. Or when we loaded data from the CSV
+file and specified the header.
+
+df.head()
+Out[39]:
+# Summer	Gold	Silver	Bronze	Total	# Winter	Gold.1	Silver.1	Bronze.1	Total.1	# Games	Gold.2	Silver.2	Bronze.2	Combined total
+Afghanistan (AFG)	13	0	0	2	2	0	0	0	0	0	13	0	0	2	2
+Algeria (ALG)	12	5	2	8	15	3	0	0	0	0	15	5	2	8	15
+Argentina (ARG)	23	18	24	28	70	18	0	0	0	0	41	18	24	28	70
+Armenia (ARM)	5	1	2	9	12	6	0	0
+
+Another option for setting an index
+is to use the set index function. This function takes a list of columns and
+promotes those columns to an index. Set index is destructive process,
+it doesn't keep the current index. If you want to keep the current index, you
+need to manually create a new column and copy into it values from
+the index attribute. Let's go back to our Olympics data frame. Let's say that we don't want to index
+the data frame by countries, but instead want to index by the number of
+gold medals that were won at summer games. First we need to preserve the country
+information into a new column. We can do this using the indexing operator
+or the string that has the column label. Then we can use the set index to set index
+of the column to summer gold medal wins.
+            df['country'] = df.index
+            df = df.set_index('Gold')
+            df.head()
+            Out[40]:
+            # Summer	Silver	Bronze	Total	# Winter	Gold.1	Silver.1	Bronze.1	Total.1	# Games	Gold.2	Silver.2	Bronze.2	Combined total	country
+            Gold
+            0	13	0	2	2	0	0	0	0	0	13	0	0	2	2	Afghanistan (AFG)
+            5	12	2	8	15	3	0	0	0	0	15	5	2	8	15	Algeria (ALG)
+            18	23	24	28	70	18	0	0	0	0
+
+
+You'll see that when we create a new index
+from an existing column it appears that a new first row has been
+added with empty values. This isn't quite what's happening. And we know this in part because
+an empty value is actually rendered either as a none or an NAN if the data
+type of the column is numeric. What's actually happened is
+that the index has a name. Whatever the column name was in the
+Jupiter notebook has just provided this in the output. We can get rid of the index completely
+by calling the function resetIndex. This promotes the index into a column and
+creates a default numbered index.
+
+f = df.reset_index()
+df.head()
+Out[41]:
+Gold	# Summer	Silver	Bronze	Total	# Winter	Gold.1	Silver.1	Bronze.1	Total.1	# Games	Gold.2	Silver.2	Bronze.2	Combined total	country
+0	0	13	0	2	2	0	0	0	0	0	13	0	0	2	2	Afghanistan (AFG)
+1	5	12	2	8	15	3	0	0	0	0	15	5	2	8	15	Algeria (ALG)
+2	18	23	24	28	70	18	0	0	0
+
+
+One nice feature of pandas is that it has
+the option to do multi-level indexing. This is similar to composite keys
+in relational database systems. To create a multi-level index,
+we simply call set index and give it a list of columns that we're
+interested in promoting to an index. Pandas will search through these in order,
+finding the distinct data and forming composite indices. A good example of this is often found
+when dealing with geographical data which is sorted by regions or demographics. Let's change data sets and look at
+some census data for a better example. This data is stored in
+the file census.csv and comes from
+the United States Census Bureau. In particular, this is a breakdown of the population
+level data at the US county level. It's a great example of how
+different kinds of data sets might be formatted when you're
+trying to clean them.
+
+df = pd.read_csv('census.csv')
+df.head()
+Out[42]:
+SUMLEV	REGION	DIVISION	STATE	COUNTY	STNAME	CTYNAME	CENSUS2010POP	ESTIMATESBASE2010	POPESTIMATE2010	...	RDOMESTICMIG2011	RDOMESTICMIG2012	RDOMESTICMIG2013	RDOMESTICMIG2014	RDOMESTICMIG2015	RNETMIG2011	RNETMIG2012	RNETMIG2013	RNETMIG2014	RNETMIG2015
+0	40	3	6	1	0	Alabama	Alabama	4779736	4780127	4785161	...	0.002295	-0.193196	0.381066	0.582002	-0.467369	1.030015	0.826644	1.383282	1.724718	0.712594
+1	50	3	6	1	1	Alabama	Autauga County	54571	54571	54660	...	7.242091	-2.915927	-3.012349	2.265971	-2.530799	7.606016	-2.626146	-2.722002	2.592270	-2.187333
+2	50	3	6	1	3	Alabama	Baldwin County	182265	182265	183193	...	14.832960	17.647293	21.845705	19.243287	17.197872	15.844176	18.559627	22.727626	20.317142	18.293499
+3	50	3	6	1	5	Alabama	Barbour County
+
+For instance, in this data set
+there are two summarized levels, one that contains summary data for
+the whole country. And one that contains summary data for
+each state, and one that contains summary data for
+each county. I often find that I want to see a list of
+all the unique values in a given column. In this data frame,
+we see that the possible values for the sum level are using the unique
+function on the data frame. This is similar to the SQL
+distinct operator. Here we can run unique on the sum
+level of our current data frame and see that there are only two
+different values, 40 and 50.
+
+df['SUMLEV'].unique()
+Out[43]:
+array([40, 50])
+
+
+Let's get rid of all of the rows that
+are summaries at the state level and just keep the county data.
+
+df=df[df['SUMLEV'] == 50]
+df.head()
+Out[44]:
+SUMLEV	REGION	DIVISION	STATE	COUNTY	STNAME	CTYNAME	CENSUS2010POP	ESTIMATESBASE2010	POPESTIMATE2010	...	RDOMESTICMIG2011	RDOMESTICMIG2012	RDOMESTICMIG2013	RDOMESTICMIG2014	RDOMESTICMIG2015	RNETMIG2011	RNETMIG2012	RNETMIG2013	RNETMIG2014	RNETMIG2015
+1	50	3	6	1	1	Alabama	Autauga County	54571	54571	54660	...	7.242091	-2.915927	-3.012349	2.265971	-2.530799	7.606016	-2.626146	-2.722002	2.592270	-2.187333
+2	50	3	6	1	3	Alabama	Baldwin County	182265	182265	183193	...	14.832960	17.647293	21.845705	19.243287	17.197872	15.844176	18.559627	22.727626	20.317142	18.293499
+3	50	3	6	1	5	Alabama	Barbour County	27457	27457	27341	...	-4.728132	-2.500690	-7.056824	-3.904217	-10.543299	-4.874741	-2.758113	-7.167664	-3.978583	-10.543299
+4	50	3	6	1	7	Alabama	Bibb County
+
+Also while this data set is interesting
+for a number of different reasons, let's reduce the data that we're going
+to look at to just the total population estimates and the total number of births.
+We can do thisby creating a list of
+column names that we want to keep then project those and assign the
+resulting data frame to our DF variable. T
+
+
+he US Census data breaks down estimates
+of population data by state and county. We can load the data and set the index
+to be a combination of the state and county values and
+see how pandas handles it in a data frame.
+
+columns_to_keep = ['STNAME',
+                   'CTYNAME',
+                   'BIRTHS2010',
+                   'BIRTHS2011',
+                   'BIRTHS2012',
+                   'BIRTHS2013',
+                   'BIRTHS2014',
+                   'BIRTHS2015',
+                   'POPESTIMATE2010',
+                   'POPESTIMATE2011',
+                   'POPESTIMATE2012',
+                   'POPESTIMATE2013',
+                   'POPESTIMATE2014',
+                   'POPESTIMATE2015']
+df = df[columns_to_keep]
+df.head()
+
+
+STNAME	CTYNAME	BIRTHS2010	BIRTHS2011	BIRTHS2012	BIRTHS2013	BIRTHS2014	BIRTHS2015	POPESTIMATE2010	POPESTIMATE2011	POPESTIMATE2012	POPESTIMATE2013	POPESTIMATE2014	POPESTIMATE2015
+1	Alabama	Autauga County	151	636	615	574	623	600	54660	55253	55175	55038	55290	55347
+2	Alabama	Baldwin County	517	2187	2092	2160	2186	2240	183193	186659	190396	195126	199713	203709
+3	Alabama	Barbour County	70	335	300	283	260	269	27341	27226	27159	26973	26815	26489
+4	Alabama	Bibb County	44	266	245	259	247	253	22861	22733	22642	22512	22549	22583
+5	Alabama	Blount County	183	744	710
+
+We do this by creating a list of the column identifiers we want to have indexed.
+And then calling set index with this list and assigning the output as appropriate.
+
+df = df.set_index(['STNAME', 'CTYNAME'])
+df.head()
+
+df = df.set_index(['STNAME', 'CTYNAME'])
+df.head()
+Out[46]:
+BIRTHS2010	BIRTHS2011	BIRTHS2012	BIRTHS2013	BIRTHS2014	BIRTHS2015	POPESTIMATE2010	POPESTIMATE2011	POPESTIMATE2012	POPESTIMATE2013	POPESTIMATE2014	POPESTIMATE2015
+STNAME	CTYNAME
+Alabama	Autauga County	151	636	615	574	623	600	54660	55253	55175	55038	55290	55347
+Baldwin County	517	2187	2092	2160	2186	2240	183193	186659	190396	195126	199713	203709
+Barbour County	70	335	300	283	260	269	27341	27226	27159	26973	26815	26489
+Bibb County	44	266	245	259	247
+
+We see here that we have a dual index, first the state name and then the county name.
+An immediate question which comes up is how we can query this data frame.
+For instance, we saw previously that the loc attribute of the data frame can take
+multiple arguments. And it could query both the row and the columns.
+When you use a Balti index, you must provide the arguments in
+order by the level you wish to query. Inside of the index,
+each column is called a level and the outermost column is level zero. For instance,
+if we want to see the population results from Washenaw county, which is where I live,
+you'd want to thefirst argument as the state of Michigan.
+            df.loc['Michigan', 'Washtenaw County']
+            Out[47]:
+            BIRTHS2010            977
+            BIRTHS2011           3826
+            BIRTHS2012           3780
+            BIRTHS2013           3662
+            BIRTHS2014           3683
+            BIRTHS2015           3709
+            POPESTIMATE2010    345563
+            POPESTIMATE2011    349048
+            POPESTIMATE2012    351213
+            POPESTIMATE2013    354289
+            POPESTIMATE2014    357029
+            POPESTIMATE2015    358880
+            Name: (Michigan, Washtenaw County), dtype: int64
+
+You might be interested in
+just comparing two counties. For instance, Washtenaw where I live and
+Wayne County which covers Detroit.
+To do this, we can pass the lock method, a list of tuples which describe
+the indices we wish to query. Since we have a multi-index of two values,
+the state and the county, we need to provide two values as
+each element of our filtering list.
+
+        df.loc[ [('Michigan', 'Washtenaw County'),
+                 ('Michigan', 'Wayne County')] ]
+        Out[48]:
+        BIRTHS2010	BIRTHS2011	BIRTHS2012	BIRTHS2013	BIRTHS2014	BIRTHS2015	POPESTIMATE2010	POPESTIMATE2011	POPESTIMATE2012	POPESTIMATE2013	POPESTIMATE2014	POPESTIMATE2015
+        STNAME	CTYNAME
+        Michigan	Washtenaw County	977	3826	3780	3662	3683	3709	345563	349048	351213	354289	357029	358880
+        Wayne County	5918	23819	23270	23377	2```
+
+Okay so that's how hierarchical indices work in a nutshell. They're a special part of
+the pandas library which I think can make management and
+reasoning about data easier. Of course hierarchical
+labeling isn't just for rows. For example, you can transpose this matrix
+and now have hierarchical column labels. And projecting a single
+column which has these labels works exactly the way
+you would expect it to.

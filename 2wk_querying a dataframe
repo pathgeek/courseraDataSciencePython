@@ -1,0 +1,155 @@
+Before we talk about how to query data
+frames we need to talk about Boolean masking. Boolean masking is the heart of fast and
+efficient querying in NumPy. It's analogous a bit to masking
+used in other computational areas.
+
+A Boolean mask is an array which can
+be of one dimension, like a series, or two dimensions, like a data frame, where each of the values in
+the array are either true or false.
+This array is essentially overlaid on top
+of the data structure that we're querying, and any cell aligned with a true value
+will be omitted into our final result, and then assign aligned with
+a false value will not be. Boolean masking is
+powerful conceptually and is the cornerstone of the efficient
+NumPy and panda's query. This technique is well used in other
+areas of computer science, for instance in graphics. But it doesn't really have an analog in
+other traditional relational databases so I think it's worth pointing out here. Boolean masks are created by applying
+operators directly to the pandas series or dataframe objects Index. For instance, in our Olympics data set,
+you might be interested in seeing only those countries who have a achieved
+the gold medal at the summer olympics. To build a Boolean mask for this query, we
+project the gold column using the indexing operator then apply the greater than
+operator with a comparison value of zero.
+            df['Gold'] > 0
+
+            Afghanistan (AFG)                               False
+                Algeria (ALG)                                    True
+                Argentina (ARG)                               True
+                Armenia (ARM)                                True
+                Australasia (ANZ) [ANZ]                  True
+                Australia (AUS) [AUS] [Z]                True
+                Austria (AUT)                                    True
+
+
+This is essentially broadcasting
+a comparison operator 'greater than' with the results being
+returned as a Boolean series. The resultant series is indexed where
+the value of each cell is either true or false depending on whether a country
+has won at least one gold medal, and the index is the country name.
+
+So this builds us the Boolean
+mask which is half the battle. What we want to do next is overlay
+that mask on the dataframe.
+
+We can do this using the where function. The where function takes a Boolean mask as
+a condition, applies it to the dataframe or series and returns a new dataframe or
+series of the same shape. Let's play this Boolean mask to our
+Olympics data, and create a data frame of only those countries who have
+won a gold at a summer games.
+            only_gold = df.where(df['Gold'] > 0)
+            only_gold.head()
+            Out[32]:
+            # Summer	Gold	Silver	Bronze	Total	# Winter	Gold.1	Silver.1	Bronze.1	Total.1	# Games	Gold.2	Silver.2	Bronze.2	Combined total
+            Afghanistan (AFG)	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN
+            Algeria (ALG)	12.0	5.0	2.0	8.0	15.0	3.0	0.0	0.0	0.0	0.0	15.0	5.0	2.0	8.0	15.0
+            Argentina (ARG)	23.0	18.0	24.0	28.0	70.0	18.0	0.0	0.0	0.0	0.0	41.0	18.0	24.0	28.0	70.0
+            Armenia (ARM)	5.0	1.0	2.0	9.0	12.0	6.0	0.0	0.0	0.0	0.0	11.0	1.0	2.0	9.0	12.0
+            Australasia (ANZ) [ANZ]	2.0	3.0	4.0	5.0	12.0	0.0	0.0
+
+We see that the resulting data frame
+keeps the original indexed values, and only data from countries that
+met the condition are retained. All of the countries which did not meet
+the condition have NaN data instead. This is okay. Most statical functions built into the
+data frame object ignore values of NaN. For instance, if we call the df art count
+on the only gold data frame, we say that there are hundred countries which have had
+gold medals awarded at the summer games.
+
+                only_gold['Gold'].count()
+                Out[33]:                100
+
+While if we call count on
+the original data frame, we see that there are 147 countries, total.
+                    df['Gold'].count()
+                    Out[34]:147
+Often we want to drop those
+rows which have no data. To do this we can use
+the drop NA function. You're going to optionally provide
+drop any of the axis that should be considering. Remember, that the axis is just
+an indicator for the columns or rows and that the default is zero which means rows.
+
+                only_gold = only_gold.dropna()
+                only_gold.head()
+                Out[35]:
+                # Summer	Gold	Silver	Bronze	Total	# Winter	Gold.1	Silver.1	Bronze.1	Total.1	# Games	Gold.2	Silver.2	Bronze.2	Combined total
+                Algeria (ALG)	12.0	5.0	2.0	8.0	15.0	3.0	0.0	0.0	0.0	0.0	15.0	5.0	2.0	8.0	15.0
+                Argentina (ARG)	23.0	18.0	24.0	28.0	70.0	18.0	0.0	0.0	0.0	0.0	41.0	18.0	24.0	28.0	70.0
+                Armenia (ARM)	5.0	1.0	2.0	9.0	12.0	6.0	0.0	0.0	0.
+
+When you find yourself talking about
+patterns and saying phrases like often I want to, it's quite likely the
+developers have included a shortcut for this common operation. For instance in this example
+we don't actually have to use the where function explicitly. The pandas developers allow the indexing
+operator to take a Boolean mask as a value instead of just a list of column names. The syntax might look a little messy
+especially if you're not used to programming languages with
+overloaded operators. But the result is that
+you're able to filter and reduce data frames relatively quickly. Here's a more concise example of
+how we could query this data frame. You'll notice that there are no NaNs when
+you query the data frame in this manner.
+
+                only_gold = df[df['Gold'] > 0]
+                only_gold.head()
+                Out[36]:
+                # Summer	Gold	Silver	Bronze	Total	# Winter	Gold.1	Silver.1	Bronze.1	Total.1	# Games	Gold.2	Silver.2	Bronze.2	Combined total
+                Algeria (ALG)	12	5	2	8	15	3	0	0	0	0	15	5	2	8	15
+                Argentina (ARG)	23	18	24	28	70	18	0	0	0	0	41	18	24	28	70
+                Armenia (ARM)	5	1	2	9	12	6	0	0	0
+
+Pandas automatically filters
+out the rows with no values. One more thing to keep in mind if you're
+not used to Boolean or bit masking for data reduction. The output of two Boolean masks being
+compared with bit wise operators is another Boolean mask. This means that you can chain together
+a bunch of and or statements in order to create a more complex query and
+the result is still a single Boolean mask. For instance, we could create a mask for all of the countries who have received
+a gold in the Summer Olympics. And bit wise or that with all of those countries who have
+received a gold in the Winter Olympics.
+
+                    len(df[(df['Gold'] > 0) | (df['Gold.1'] > 0)])
+                    Out[37]:
+                    101
+If we apply this to the data frame and use the length function to see how many
+rows there are we see that there's 101 countries which will have
+won a gold medal at some time. Another example for fun. Have there been any countries who have
+only won a gold in the Winter Olympics and never in the Summer Olympics? Here's one way to answer that.
+
+
+                        df[(df['Gold.1'] > 0) & (df['Gold'] == 0)]
+                        Out[38]:
+                        # Summer	Gold	Silver	Bronze	Total	# Winter	Gold.1	Silver.1	Bronze.1	Total.1	# Games	Gold.2	Silver.2	Bronze.2	Combined total
+                        Liechtenstein (LIE)	16	0	0	0	0	18	2	2	5	9	34	2	2	5	9
+
+
+Poor Liechtenstein, thankfully
+the Olympics come every four years. I know who I'll be cheering for
+in 2020 to win their first summer gold. extremely important and often an issue for
+new users is to remember that each Boolean mask needs to be encased in parenthesis
+because of the orders of operation. This can cause no end of frustration
+if your not used to it so be careful. In this lecture we took
+a look at Boolean masking. We didn't have much code to write but
+applying mask to data frames is really core patterns workflow
+as worth practicing.
+
+
+write a query to return all of the names of people who bought products worth >$3.00
+
+purchase_1 = pd.Series({'Name': 'Chris',
+                        'Item Purchased': 'Dog Food',
+                        'Cost': 22.50})
+purchase_2 = pd.Series({'Name': 'Kevyn',
+                        'Item Purchased': 'Kitty Litter',
+                        'Cost': 2.50})
+purchase_3 = pd.Series({'Name': 'Vinod',
+                        'Item Purchased': 'Bird Seed',
+                        'Cost': 5.00})
+
+df = pd.DataFrame([purchase_1, purchase_2, purchase_3], index=['Store 1', 'Store 1', 'Store 2'])
+
+df['Name'][df['Cost']>3]
